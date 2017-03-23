@@ -1,5 +1,0 @@
-logging:
-  file: ./logger.log
-
-db:
-  dbname: newscontentdb
