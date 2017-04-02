@@ -1,5 +1,6 @@
 from flask import Flask
 from celery import Celery
+from datetime import timedelta
 from flask_mongoengine import MongoEngine
 from flask.ext.login import LoginManager
 
@@ -19,3 +20,4 @@ celery = make_celery(app);
 db = MongoEngine(app);
 
 from newsClassifier.Views import loginsignup
+from newsClassifier.Helpers import celeryTasks

@@ -1,3 +1,5 @@
+import datetime
+
 from mongoengine import *
 from mongoengine import Document
 from newsClassifier import db
@@ -5,6 +7,7 @@ from newsClassifier import db
 class User(Document):
 	email = db.StringField(required=True, unique=True)
 	password = db.StringField()
+	join_date = DateTimeField(default=datetime.datetime.now)
 	meta = {'strict': False}
 
 	def __unicode__(self):

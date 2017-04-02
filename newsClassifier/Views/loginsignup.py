@@ -1,5 +1,4 @@
 from newsClassifier import app
-from newsClassifier import celeryTasks
 from newsClassifier.Models.user import User
 from newsClassifier.Views import newscontentdisplay
 import os

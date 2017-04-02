@@ -169,5 +169,4 @@ class Scraper:
 			newsTitle.append(newslinks.get(newslink))
 			imagelist.append(self.saveimage(newslinks.get(newslink), newslink))
 			newsall.append(self.scrapfromUrl(newslinks.get(newslink), newslink))
-		print zip(newsTitle, newsall, imagelist);
 		return zip(newsTitle, newsall, imagelist)
