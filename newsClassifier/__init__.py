@@ -1,26 +1,21 @@
 from flask import Flask
 from celery import Celery
-from flask_pymongo import PyMongo
+from flask_mongoengine import MongoEngine
+from flask.ext.login import LoginManager
 
 app = Flask(__name__);
-app.config['MONGO_DBNAME'] = 'newsClassifierDB'
+app.config['MONGODB_DB'] = 'newsClassifierDB'
 app.config['MONGO_URI'] = 'mongodb://localhost:27017/newsClassifierDB'
+app.config['SECRET_KEY'] = 'H3@d#$XDA6'
+
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 def make_celery(app):
 	celery = Celery(app.import_name, broker='redis://localhost:6379/0')
-	# TaskBase = celery.Task
-	# class ContextTask(TaskBase):
-	# 	abstract = True
-	# 	def __call__(self, *args, **kwargs):
-	# 		with app.app_context():
-	# 			return TaskBase.__call__(self, *args, **kwargs)
-
-	# celery.Task = ContextTask
 	return celery
 
 celery = make_celery(app);
+db = MongoEngine(app);
 
-print(celery)
-
-mongo = PyMongo(app)
 from newsClassifier import views
