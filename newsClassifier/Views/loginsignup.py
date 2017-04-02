@@ -1,29 +1,31 @@
 from newsClassifier import app
 from newsClassifier import celeryTasks
-from Models.user import User
+from newsClassifier.Models.user import User
+from newsClassifier.Views import newscontentdisplay
 import os
 
 from newsScraper.scraper import Scraper
-from flask import jsonify, send_from_directory, request, render_template, flash, Response
+from flask import jsonify, send_from_directory, request, render_template, flash, Response, redirect
 from flask.ext.login import login_required, login_user, logout_user, current_user
 from newsClassifier import login_manager
 from newsClassifier.Helpers import LoginFlask
 
 @app.route('/index')
 @app.route('/')
-@login_required
 def index():
 	if current_user.is_authenticated:
-		print("HELLO")
-		return logout()
+		return redirect('/newscontent')
 	else:
-		print "no";
-		return login()
+		return redirect('/login')
 
 @app.route('/logout')
+@login_required
 def logout():
+	print(current_user)
 	logout_user();
-	return Response('<p>Logged Out</p>')
+	message = "Successfully logged out!"
+	flash(message)
+	return redirect('/login')
 
 @app.route('/register' , methods=['GET','POST'])
 def register():
@@ -34,28 +36,27 @@ def register():
 	user = User();
 	user.password = password
 	user.email = email
-	print(user)
 	try:
 		user.save()
 	except:
 		print('Failed')
 		flash('Registration Failed. Email may be already with us!')
-		return render_template('register.html')
+		return redirect('/register')
 	else:
 		login_user(user)
-		return render_template('index.html')
+		return redirect('/')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+	if current_user.is_authenticated:
+		return redirect('/newscontent')
 	if request.method == 'GET':
 		return render_template('login.html')
 	email = request.form['email']
 	password = request.form['password']
 	user = User.objects(email = email)
 	if user[0].password == password:
-		print("logged")
 		login_user(user[0])
+		return redirect('/')
 	else:
-		print("not logged")
-
-	return render_template('login.html')
+		return redirect('/register')

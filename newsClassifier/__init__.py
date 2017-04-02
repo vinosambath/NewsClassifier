@@ -18,4 +18,4 @@ def make_celery(app):
 celery = make_celery(app);
 db = MongoEngine(app);
 
-from newsClassifier import views
+from newsClassifier.Views import loginsignup

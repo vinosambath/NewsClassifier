@@ -3,6 +3,10 @@
 
   </head>
   <body>
+    Login
+    {% for message in get_flashed_messages() %}
+      {{message}}
+    {% endfor %}
     <form action="" method="POST">
       <div class="form-group">
         <label for="email">Email address:</label>
