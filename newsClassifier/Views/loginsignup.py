@@ -53,9 +53,14 @@ def login():
 		return render_template('login.html')
 	email = request.form['email']
 	password = request.form['password']
+	rememberme = request.form.get('rememberme', None)
+	print(rememberme)
 	user = User.objects(email = email)
 	if user[0].password == password:
-		login_user(user[0])
+		if rememberme == 'on':
+			login_user(user[0], remember=True)
+		else:
+			login_user(user[0])
 		return redirect('/')
 	else:
 		return redirect('/register')

@@ -1,1 +1,6 @@
-Welcome hello {{ news }}
+Welcome hello
+{% for new in news %}
+      <div>{{ new.news_title }}</div>
+      <div>{{ new.added_time }}</div>
+      <div>{{ new.news_content }}</div>
+{% endfor %}
