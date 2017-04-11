@@ -12,8 +12,16 @@ def newscontent():
 	news = getNewsContentForThisUser();
 	return render_template('newscontentdisplay.html', news=news)
 
+@app.route('/newsfetcher')
 @login_required
-def getNewsContentForThisUser():
+def newsfetcher():
+	start = request.args.get('start');
+	end = request.args.get('end')
+	news = getNewsContentForThisUser(start, end);
+	return news.to_json()
+
+@login_required
+def getNewsContentForThisUser(start = 0, end = 5):
 	list = []
-	news = News.objects[:5].order_by('added_time');
+	news = News.objects[int(start):int(end)].order_by('added_time');
 	return news
