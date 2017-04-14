@@ -1,6 +1,48 @@
-Welcome hello
-{% for new in news %}
-      <div>{{ new.news_title }}</div>
-      <div>{{ new.added_time }}</div>
-      <div>{{ new.news_content }}</div>
-{% endfor %}
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript">
+	var requestsent = false;
+	var start = 0;
+	var increment = 4
+
+	$(window).scroll(function() { 
+			  console.log($(document).height() - $(window).scrollTop() - $(window).height() < 800)
+			  if ( $(document).height() - $(window).scrollTop() - $(window).height() < 800)
+			  {
+			  	if(requestsent == false) {
+			  		requestsent = true;
+			  		var startnum = parseInt(start);
+			  		var inter = parseInt(increment)
+			  		var dup = startnum + inter	
+			  		$.ajax({
+						url: 'http://localhost:5000/newsfetcher?start=' + startnum + '&end=' + dup,
+						type: 'GET',
+						cache: false,
+						success: function(data) {
+							var content = $("#newscontent").html();
+							content += data;
+							$("#newscontent").html(content);
+							start += increment + 1
+							data = "";
+						}.bind(this),
+						error: function(data) {
+							console.log(data);
+						},
+						complete: function() {
+							requestsent = false
+						}
+					});
+			  		
+			  	}
+			  }
+	})
+
+</script>
+<Title>Welcome hello</Title>
+<body style="height:100%;" id="newscontent">
+	{% for new in news %}
+	      <div>{{ new.news_title }}</div>
+	      <div>{{ new.added_time }}</div>
+	      <div>{{ new.news_content }}</div>
+	{% endfor %}
+</body>
+

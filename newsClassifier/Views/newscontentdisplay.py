@@ -9,19 +9,23 @@ from newsClassifier.Models.news import News
 @app.route('/newscontent')
 @login_required
 def newscontent():
-	news = getNewsContentForThisUser();
-	return render_template('newscontentdisplay.html', news=news)
+	return render_template('newscontentdisplay.html', news="Welcome !")
 
 @app.route('/newsfetcher')
-@login_required
 def newsfetcher():
 	start = request.args.get('start');
 	end = request.args.get('end')
 	news = getNewsContentForThisUser(start, end);
-	return news.to_json()
+	if type(news) == 'str':
+		return news
+	return news.to_json();
 
 @login_required
 def getNewsContentForThisUser(start = 0, end = 5):
 	list = []
-	news = News.objects[int(start):int(end)].order_by('added_time');
+	len = News.objects.count();
+	
+	if(int(start) > len):
+		return "{'error': 'end of news'}"
+	news = News.objects[int(start):int(end)].order_by('added_time')
 	return news

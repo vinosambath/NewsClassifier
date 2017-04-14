@@ -23,6 +23,6 @@ def fetch_url():
 		else:
 			print("Skipped as they already exist")
 
-@periodic_task(run_every=timedelta(seconds=40))
+@periodic_task(run_every=timedelta(seconds=60))
 def hello():
 	fetch_url()
